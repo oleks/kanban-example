@@ -1,0 +1,29 @@
+version: "3.7"
+
+services:
+  dolt:
+    stdin_open: true
+    tty: true
+    image: dolt
+    hostname: dolt
+    build:
+      context: .
+      dockerfile: docker/dolt.Dockerfile
+    volumes:
+      - ./dolt-data/:/var/lib/dolt
+    network_mode: "host"
+    ports:
+      - "3306:3306"
+  kanban:
+    depends_on:
+      - dolt
+    stdin_open: true
+    tty: true
+    image: kanban
+    hostname: kanban
+    build:
+      context: .
+      dockerfile: docker/kanban.Dockerfile
+    network_mode: "host"
+    ports:
+      - "8080:8080"
